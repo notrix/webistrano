@@ -1,5 +1,5 @@
 <% projects = current_user.admin? ? Project.find(:all, :order => "name ASC") : current_user.projects %>
-<div id="projects_open_content" style="<%=h show_if_opened(status) %>">
+<div class="open" style="<%=h show_if_opened(status) %>">
   <% if projects.count > 0 %>
     <% for project in projects %>
       <a href="<%= project_path(project) %>" class="menu_link <%=h active_link_class(project) %>" title="<%=h project.name %>">
@@ -34,10 +34,8 @@
     <% end %>
   <% end %>
 </div>
-<div id="projects_closed_content" style="<%=h show_if_closed(status) %>">
-  <a href="javascript:open_menu_box('projects')" class="menu_link menu_link_create">
-	  <div class="menu_link_title">
-	    <%=h pluralize(Project.count, 'project')%>
-	  </div>
-  </a>
+<div class="closed" style="<%= show_if_closed(status) %>">
+  <div class="menu_link_title">
+    <%= pluralize(Project.count, 'project')%>
+  </div>
 </div>
