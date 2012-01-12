@@ -2,7 +2,8 @@ source "http://rubygems.org"
 
 gem "rails", "=2.3.14"
 gem "erubis"
-gem "rake", "0.8.7"
+gem "mysql"
+gem "rake"
 gem "rdoc"
 gem "syntax"
 gem "capistrano"
@@ -13,8 +14,4 @@ gem "thin"
 
 group :test do
   gem "mocha", "0.9.8"
-end
-
-group :production do
-  gem "mysql"
 end
