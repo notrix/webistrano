@@ -1,7 +1,8 @@
 test:
   adapter: mysql
-  encoding: utf8
   database: webistrano_test
   username:
   password:
+  pool: 8
+  reconnect: true
   socket: /var/run/mysqld/mysqld.sock
