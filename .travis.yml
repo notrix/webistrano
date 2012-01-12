@@ -1,0 +1,5 @@
+rvm: 1.8.7
+before_script:
+  - "cp config/database.yml.travis config/database.yml"
+  - "cp config/webistrano.yml.sample config/webistrano.yml"
+script: "bundle exec rake db:create db:migrate test"
