@@ -468,6 +468,22 @@ class Webistrano::DeployerTest < ActiveSupport::TestCase
     assert_match(/Local scm command not found/, deployment.log)
   end
 
+  # def test_handling_of_prompt_configuration
+  #   stage_with_prompt = create_new_stage(:name => 'prod', :project => @project)
+  #   role = create_new_role(:stage => stage_with_prompt)
+  #   assert stage_with_prompt.deployment_possible?, stage_with_prompt.deployment_problems.inspect
+
+  #   # add a config value that wants a promp
+  #   stage_with_prompt.configuration_parameters.build(:name => 'password', :prompt_on_deploy => 1).save!
+  #   assert !stage_with_prompt.prompt_configurations.empty?
+
+  #   # create the deployment
+  #   deployment = create_new_deployment(:stage => stage_with_prompt, :task => 'deploy', :prompt_config => {:password => '123'})
+
+  #   deployer = Webistrano::Deployer.new(deployment)
+  #   deployer.invoke_task!
+  # end
+
   def test_loading_of_template_tasks
     @project.template = 'mongrel_rails'
     @project.save!
