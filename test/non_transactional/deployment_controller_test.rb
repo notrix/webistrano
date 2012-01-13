@@ -1,21 +1,21 @@
 require File.dirname(__FILE__) + '/../non_transactional_test_helper'
-require 'deployments_controller'
+#require 'deployments_controller'
 
 # Re-raise errors caught by the controller.
 class DeploymentsController; def rescue_action(e) raise e end; end
 
-class DeploymentsControllerTest < Test::Unit::TestCase
+class DeploymentsControllerTest < ActionController::TestCase
   def setup
     Project.destroy_all
     @controller = DeploymentsController.new
     @request    = ActionController::TestRequest.new
     @response   = ActionController::TestResponse.new
-    
+
     @project = create_new_project(:name => 'Project X')
     @stage = create_new_stage(:name => 'Prod', :project => @project)
     @role = create_new_role(:name => 'web', :stage => @stage)
     @deployment = create_new_deployment(:task => 'deploy:setup', :stage => @stage)
-    
+
     @user = login
   end
 
@@ -27,7 +27,7 @@ class DeploymentsControllerTest < Test::Unit::TestCase
 
     assert_response :success
   end
-  
+
   def test_locking_override
     @stage.lock
     assert_difference "Deployment.count" do
@@ -36,7 +36,7 @@ class DeploymentsControllerTest < Test::Unit::TestCase
 
     assert_response :redirect
   end
-  
+
   def test_stage_locked_after_deploy
     assert !@stage.locked?
     assert_difference "Deployment.count" do
@@ -46,7 +46,7 @@ class DeploymentsControllerTest < Test::Unit::TestCase
     assert_response :redirect
     assert @stage.reload.locked?
   end
-    
+
 end
 
 
