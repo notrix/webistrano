@@ -3,4 +3,4 @@ before_script:
   - "sudo gem update --system 1.6.2"
   - "cp config/database.yml.travis config/database.yml"
   - "cp config/webistrano.yml.sample config/webistrano.yml"
-script: "bundle exec rake db:create db:migrate test:units test:non_transactional test:functionals"
+script: "bundle exec rake db:create db:migrate test:units test:functionals test:non_transactional"
