@@ -1,0 +1,5 @@
+project_1:
+  id: 1
+  name: 'Project 1'
+  description: 'Description of project 1'
+  template: rails
