@@ -5,8 +5,7 @@ class CreateProjectsUsers < ActiveRecord::Migration
       t.integer :user_id
     end
 
-    add_index :projects_users, :project_id
-    add_index :projects_users, :user_id
+    add_index :projects_users, [:project_id, :user_id], :unique => true
   end
 
   def self.down

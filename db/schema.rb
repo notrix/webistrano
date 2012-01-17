@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120104004050) do
+ActiveRecord::Schema.define(:version => 20120116214533) do
 
   create_table "configuration_parameters", :force => true do |t|
     t.string   "name"
@@ -45,6 +45,8 @@ ActiveRecord::Schema.define(:version => 20120104004050) do
     t.integer "role_id"
   end
 
+  add_index "deployments_roles", ["deployment_id", "role_id"], :name => "index_deployments_roles_on_deployment_id_and_role_id", :unique => true
+
   create_table "hosts", :force => true do |t|
     t.string   "name"
     t.datetime "created_at"
@@ -67,8 +69,7 @@ ActiveRecord::Schema.define(:version => 20120104004050) do
     t.integer "user_id"
   end
 
-  add_index "projects_users", ["project_id"], :name => "index_projects_users_on_project_id"
-  add_index "projects_users", ["user_id"], :name => "index_projects_users_on_user_id"
+  add_index "projects_users", ["project_id", "user_id"], :name => "index_projects_users_on_project_id_and_user_id", :unique => true
 
   create_table "recipe_versions", :force => true do |t|
     t.integer  "recipe_id"
@@ -93,6 +94,8 @@ ActiveRecord::Schema.define(:version => 20120104004050) do
     t.integer "recipe_id"
     t.integer "stage_id"
   end
+
+  add_index "recipes_stages", ["recipe_id", "stage_id"], :name => "index_recipes_stages_on_recipe_id_and_stage_id", :unique => true
 
   create_table "roles", :force => true do |t|
     t.string   "name"
@@ -130,8 +133,7 @@ ActiveRecord::Schema.define(:version => 20120104004050) do
     t.boolean "read_only"
   end
 
-  add_index "stages_users", ["stage_id"], :name => "index_stages_users_on_stage_id"
-  add_index "stages_users", ["user_id"], :name => "index_stages_users_on_user_id"
+  add_index "stages_users", ["stage_id", "user_id"], :name => "index_stages_users_on_stage_id_and_user_id", :unique => true
 
   create_table "users", :force => true do |t|
     t.string   "login"

@@ -6,8 +6,7 @@ class CreateStagesUsers < ActiveRecord::Migration
       t.boolean :read_only
     end
 
-    add_index :stages_users, :stage_id
-    add_index :stages_users, :user_id
+    add_index :stages_users, [:stage_id, :user_id], :unique => true
   end
 
   def self.down
