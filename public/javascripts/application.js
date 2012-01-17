@@ -26,18 +26,6 @@ $(function(){
   });
 
 
-  // ====================================
-  // = Override deployment lock trigger =
-  // ====================================
-  $('override_locking_trigger').change(function(){
-    if ($(this).is('*:checked')) {
-      $('deployment_override_locking').val(1);
-    } else {
-      $('deployment_override_locking').val(0);
-    }
-  });
-
-
   // ====================
   // = Effective Config =
   // ====================

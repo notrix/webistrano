@@ -26,14 +26,14 @@
 	</p>
 	<p>
 	  <b>Stage:</b>
-	  <%= link_to @deployment.stage.name, project_stage_path(@project, @stage) %> 
+	  <%= link_to @deployment.stage.name, project_stage_path(@project, @stage) %>
 	</p>
 	<p>
-	  <b>Deployed by:</b> 
+	  <b>Deployed by:</b>
 	  <%= user_info(@deployment.user) rescue '' %>
 	</p>
 	<p>
-	  <b>Revision:</b> 
+	  <b>Revision:</b>
 	  <%= @deployment.revision %>
 	</p>
 	<p>
@@ -90,23 +90,28 @@
   </tr>
 </table>
 
-
-
-
 <% unless @deployment.completed? %>
   <script type="text/javascript">
-    
+
     function update_status(){
-      new Ajax.Updater('status_info','<%=h project_stage_deployment_path(@project, @stage, @deployment) %>.js',{
-        method: 'get',
-        evalScripts: true,
-        parameters: {
-          random_differentiator: Math.floor(Math.random()*50000), // work around IE caching bug
-          auto_scroll: $('auto_scroll_log').checked
-        }
+      var request = $.ajax({
+        url: '<%= project_stage_deployment_path(@project, @stage, @deployment) %>.js',
+        data: {
+          auto_scroll: $('#auto_scroll_log').prop('checked')
+        },
+        cache: false,
+        dataType: "html"
+      });
+
+      request.done(function(msg) {
+        $("#status_info").html(msg);
+      });
+
+      request.fail(function(jqXHR, textStatus) {
+        alert( "Request failed: " + textStatus );
       });
     }
-    
+
     setTimeout(update_status, 3000);
     check_auto_scroll_log();
   </script>

@@ -15,8 +15,11 @@
   </table>
 <% end %>
 
+<% projectUsers = User.find(:all).reject{|u| @project.user_ids.include?(u.id)}.collect{|u| [u.login, u.id]} %>
+<% if !projectUsers.empty? %>
 <form action='<%= project_project_users_path(@project) %>' method='post'>
   <label>Add user: </label>
-  <%= select 'project_user', 'id', User.find(:all).reject{|u| @project.user_ids.include?(u.id)}.collect{|u| [u.login, u.id]} %>
+  <%= select 'project_user', 'id', projectUsers %>
   <input type='submit' value='Add' />
 </form>
+<% end %>

@@ -17,12 +17,15 @@
   </table>
 <% end %>
 
+<% stageUsers = @stage.project.users.reject{|u| @stage.user_ids.include?(u.id)}.collect{|u| [u.login, u.id]} %>
+<% if !stageUsers.empty? %>
 <form action='<%= project_stage_stage_users_path(@stage.project, @stage) %>' method='post'>
   <label>Add user: </label>
-  <%= select 'stage_user', 'id', @stage.project.users.reject{|u| @stage.user_ids.include?(u.id)}.collect{|u| [u.login, u.id]} %>
+  <%= select 'stage_user', 'id', stageUsers %>
   <!--alimaher-->
   <%= check_box 'stage_user','read_only', {:checked => false, :class => 'noframe'} %>
   <label for="read_only">read only</label>
   <!--end alimaher-->
   <input type='submit' value='Add' />
 </form>
+<% end %>

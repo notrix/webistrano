@@ -6,14 +6,18 @@
   <table class="sortable">
     <tr>
       <th width="34%">Name</th>
+    <% if current_user.admin? %>
       <th width="33%">#Hosts</th>
+    <% end %>
       <th width="33%">#Deployments</th>
     </tr>
   <% stages = current_user.admin? ? @project.stages : current_user.project_stages(@project) %>
   <% for stage in stages %>
     <tr class="<%= cycle :even, :odd, :name => 'stages' %>">
       <td><%= link_to h(stage.name), project_stage_path(@project, stage) %></td>
+    <% if current_user.admin? %>
       <td><%=h stage.hosts.count  %></td>
+    <% end %>
       <td><%=h stage.deployments.count  %></td>
     <% if current_user.admin? %>
       <td><%= link_to 'Edit', edit_project_stage_path(@project, stage) %></td>
