@@ -1,5 +1,5 @@
 class Project < ActiveRecord::Base
-  has_and_belongs_to_many :users
+  has_and_belongs_to_many :users, :after_remove => :delete_roles_user
   has_many :stages, :dependent => :destroy, :order => 'name ASC'
   has_many :deployments, :through => :stages
   has_many :configuration_parameters, :dependent => :destroy, :class_name => "ProjectConfiguration", :order => 'name ASC'
@@ -76,6 +76,12 @@ class Project < ActiveRecord::Base
     end
 
     self.reload
+  end
+
+  def delete_roles_user(user)
+    self.stages.each do |stage|
+      stage.users.delete(stage.users.find(:all, :conditions => ['user_id = ?', user.id]))
+    end
   end
 
 end

@@ -35,4 +35,17 @@ class ProjectsUsersTest < ActiveSupport::TestCase
       pu = ProjectsUsers.create!(:project_id => project.id, :user_id => @user.id)
     }
   end
+
+  def test_delete
+    project = create_new_project
+    pu = ProjectsUsers.create!(:project_id => project.id, :user_id => @user.id)
+    stage = create_new_stage(:project => project)
+    su = StagesUser.create!(:stage_id => stage.id, :user_id => @user.id)
+
+    assert_nothing_raised{
+      project.users.delete(@user)
+    }
+
+    assert_equal 0, StagesUser.count
+  end
 end
