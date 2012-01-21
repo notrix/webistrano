@@ -38,7 +38,6 @@ module Factories
     p.template = options[:template]
     p.save!
 
-
     return p
   end
 

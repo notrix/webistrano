@@ -2,19 +2,19 @@ require 'test_helper'
 
 class ProjectsUsersTest < ActiveSupport::TestCase
 
-  fixtures :projects
   fixtures :users
 
   def setup
-    @project = projects(:project_1)
     @user = users(:quentin)
   end
 
   def test_creation
     assert_equal 0, ProjectsUsers.count
 
+    project = create_new_project
+
     assert_nothing_raised{
-      pu = ProjectsUsers.create!(:project_id => @project.id, :user_id => @user.id)
+      pu = ProjectsUsers.create!(:project_id => project.id, :user_id => @user.id)
     }
 
     assert_equal 1, ProjectsUsers.count
@@ -27,10 +27,12 @@ class ProjectsUsersTest < ActiveSupport::TestCase
     assert_not_nil pu.errors.on("project_id")
 
     # try to create two entries with same project_id and user_id
-    pu = ProjectsUsers.create!(:project_id => @project.id, :user_id => @user.id)
+    project = create_new_project
+
+    pu = ProjectsUsers.create!(:project_id => project.id, :user_id => @user.id)
 
     assert_raise(ActiveRecord::StatementInvalid) {
-      pu = ProjectsUsers.create!(:project_id => @project.id, :user_id => @user.id)
+      pu = ProjectsUsers.create!(:project_id => project.id, :user_id => @user.id)
     }
   end
 end

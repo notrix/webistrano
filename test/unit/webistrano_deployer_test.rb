@@ -753,7 +753,6 @@ class Webistrano::DeployerTest < ActiveSupport::TestCase
     deployment.task = 'deploy'
     deployment.description = 'bugfix'
     deployment.user = create_new_user
-    deployment.roles << @stage.roles
     deployment.prompt_config = {:using_foo => '#{foo} 1234'}
     deployment.save!
 
