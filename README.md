@@ -1,7 +1,7 @@
 Webistrano - Capistrano deployment the easy way
 ===============================================
 
-[![Build Status](https://secure.travis-ci.org/jeromemacias/webistrano.png)](http://travis-ci.org/jeromemacias/webistrano)
+[![Build Status](https://secure.travis-ci.org/jeromemacias/webistrano.png)](http://travis-ci.org/jeromemacias/webistrano) ![project status](http://stillmaintained.com/kriswallsmith/assetic.png)
 
 About
 -----
