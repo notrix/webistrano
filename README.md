@@ -27,6 +27,12 @@ Install all gem dependencies via the gem bundler:
 Copy `config/webistrano_config.rb.sample` to `config/webistrano_config.rb` and edit appropriatly.  
 In this configuration file you can set the mail settings of Webistrano.
 
+Generate a file (config/initializers/session_store.rb) with a random secret used to secure session data :
+
+```bash
+> bundle exec rake generate_session_store
+```
+
 ### 3. Database
 
 Copy `config/database.yml.sample` to `config/database.yml` and edit to resemble your setting.  
