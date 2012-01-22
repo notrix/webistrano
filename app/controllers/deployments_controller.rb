@@ -32,6 +32,7 @@ class DeploymentsController < ApplicationController
   def new
     @deployment = @stage.deployments.new
     @deployment.task = params[:task]
+    @deployment.revision = params[:revision]
 
     # Allow description to be passed in via a URL parameter
     @deployment.description = params[:description]

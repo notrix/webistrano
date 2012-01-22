@@ -42,6 +42,10 @@ module Webistrano
     def invoke_task!
       options[:actions] = deployment.task
 
+      unless deployment.revision.blank?
+        options[:revision] = deployment.revision
+      end
+
       case execute!
       when false
         deployment.complete_with_error!
@@ -68,7 +72,10 @@ module Webistrano
           exchange_real_revision(config)
         end
 
-        save_revision(config)
+        unless deployment.revision.blank?
+          save_revision(config)
+        end
+
         save_pid
 
         config.trigger(:load)

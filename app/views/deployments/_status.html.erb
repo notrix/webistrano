@@ -60,9 +60,9 @@
 
 <fieldset class="fieldset">
   <legend>Log</legend>
-  <div style="float:right; padding: 0px 5px 10px 0px; *padding: 0px"><input type="checkbox" class="noframe" id="auto_scroll_log" <%=h @auto_scroll ? 'checked="checked"' : ''%> > <label for="auto_scroll_log" class="redtext"><b>auto scroll</b></label></div>
-	<div class="log_output">
-		<pre><%=h @deployment.log.gsub('\n', "\n") rescue '' %></pre>
+  <div style="float:right; padding: 0px 5px 10px 0px; *padding: 0px"><input type="checkbox" class="noframe" id="auto_scroll_log" <%=h @auto_scroll ? 'checked="checked"' : ''%>><label for="auto_scroll_log" class="redtext"><b>auto scroll</b></label></div>
+  <div class="log_output">
+    <pre><%=h @deployment.log.gsub('\n', "\n") rescue '' %></pre>
   </div>
 </fieldset>
 

@@ -8,7 +8,7 @@ class Deployment < ActiveRecord::Base
 
   serialize :excluded_host_ids
 
-  attr_accessible :task, :prompt_config, :description, :excluded_host_ids, :override_locking
+  attr_accessible :task, :revision, :prompt_config, :description, :excluded_host_ids, :override_locking
 
   # given configuration hash on create in order to satisfy prompt configurations
   attr_accessor :prompt_config
