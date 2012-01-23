@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120116214533) do
+ActiveRecord::Schema.define(:version => 20120123214622) do
 
   create_table "configuration_parameters", :force => true do |t|
     t.string   "name"
@@ -24,7 +24,7 @@ ActiveRecord::Schema.define(:version => 20120116214533) do
 
   create_table "deployments", :force => true do |t|
     t.string   "task"
-    t.text     "log"
+    t.text     "log",               :limit => 2147483647
     t.integer  "stage_id"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -34,7 +34,7 @@ ActiveRecord::Schema.define(:version => 20120116214533) do
     t.string   "excluded_host_ids"
     t.string   "revision"
     t.integer  "pid"
-    t.string   "status",            :default => "running"
+    t.string   "status",                                  :default => "running"
   end
 
   add_index "deployments", ["stage_id"], :name => "index_deployments_on_stage_id"
