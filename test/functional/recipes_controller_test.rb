@@ -114,8 +114,10 @@ class RecipesControllerTest < ActionController::TestCase
   def test_should_preview_the_recipe
     @user = admin_login
 
-    xhr :get, :preview, :recipe => {:body => @recipe.body}
-    assert_select_rjs :replace_html, "preview"
+    xhr :post, :preview, :recipe_body => @recipe.body
+    @response.content_type = 'text/html'
+
+    assert_select 'pre'
   end
 
   def test_show_with_version_should_show_the_specified_version

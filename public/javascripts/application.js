@@ -88,7 +88,6 @@ $(function(){
   });
 
   $('#project_template').change();
-
 });
 
 // open a new window
@@ -99,7 +98,8 @@ function loadWindow(url) {
 
 /* Create Menu Links */
 
-function open_menu(dom_id){
+function open_menu(dom_id)
+{
   // arrow images
   $('#' + dom_id + "_arrow_right").hide();
   $('#' + dom_id + "_arrow_down").show();
@@ -108,11 +108,32 @@ function open_menu(dom_id){
   $('#' + dom_id + "_stages").show();
 }
 
-function close_menu(dom_id){
+function close_menu(dom_id)
+{
   // arrow images
   $('#' + dom_id + "_arrow_right").show();
   $('#' + dom_id + "_arrow_down").hide();
 
   // stages
   $('#' + dom_id + "_stages").hide();
+}
+
+function observe_field(field_id, callback)
+{
+  var field = $('#' + field_id), ti = null;
+
+  var start = function() {
+    if (ti) {
+      clearTimeout(ti);
+    }
+    ti = setTimeout(callback, 500);
+  };
+
+  var stop = function() {
+    if (ti) {
+      ti = setTimeout(callback, 500);
+    }
+  };
+
+  field.bind('keyup', start); // detect interaction
 }

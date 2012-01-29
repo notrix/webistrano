@@ -14,14 +14,37 @@
   <%= text_area 'recipe', 'body', :style =>'width:663px; height: 400px;' %>
 </p>
 
-<%= observe_field "recipe_body", :frequency => 2.5, :with => "Form.Element.serialize('recipe_body')", :url => preview_recipes_url%>
 <div id="preview_fieldset">
   <fieldset class="fieldset" style="width:560px;">
     <legend>Code-Preview</legend>
     <div id="preview">
-      <%= render(:partial => 'preview', :locals => {:recipe => @recipe}) %>
+      <%= render(:partial => 'preview', :locals => {:recipe_body => @recipe.body}) %>
     </div>
   </fieldset>
 <br/>
 </div>
 
+<script type="text/javascript">
+  function update_preview()
+  {
+    var request = $.ajax({
+      url: '<%= preview_recipes_url %>',
+      type: 'POST',
+      data: {
+        "recipe_body": $('#recipe_body').val()
+      },
+      cache: false,
+      dataType: "html"
+    });
+
+    request.done(function(msg) {
+      $("#preview").html(msg);
+    });
+
+    request.fail(function(jqXHR, textStatus) {
+      alert( "Request failed: " + textStatus );
+    });
+  }
+
+  observe_field('recipe_body', update_preview);
+  </script>
