@@ -4,7 +4,6 @@ class ProjectUsersControllerTest < ActionController::TestCase
 
   def setup
     @project = create_new_project
-    @stage = create_new_stage(:project => @project)
     @user = admin_login
     @user_for_project = create_new_user
   end
