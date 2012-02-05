@@ -125,7 +125,6 @@ module Factories
       :roles => [],
       :description => random_string,
       :user => create_new_user,
-      :revision => "392",
       :pid => nil,
       :excluded_host_ids => [],
       :override_locking => false

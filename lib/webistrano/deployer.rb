@@ -43,7 +43,7 @@ module Webistrano
       options[:actions] = deployment.task
 
       unless deployment.revision.blank?
-        options[:revision] = deployment.revision
+        options[:pre_vars]['revision'] = deployment.revision
       end
 
       case execute!
@@ -72,10 +72,7 @@ module Webistrano
           exchange_real_revision(config)
         end
 
-        unless deployment.revision.blank?
-          save_revision(config)
-        end
-
+        save_revision(config)
         save_pid
 
         config.trigger(:load)

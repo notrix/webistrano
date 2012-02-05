@@ -849,7 +849,7 @@ class Webistrano::DeployerTest < ActiveSupport::TestCase
     assert_equal 1, @stage.list_tasks.delete_if{|t| t[:name] != 'foo:bar'}.size
   end
 
-  def test_deployer_sets_revision
+  def test_deployer_sets_detected_revision
     config = prepare_config_mocks
 
     deployer = Webistrano::Deployer.new(@deployment)
@@ -863,6 +863,23 @@ class Webistrano::DeployerTest < ActiveSupport::TestCase
     deployer.invoke_task!
 
     assert_equal "4943", deployer.deployment.reload.revision
+  end
+
+  def test_deployer_sets_revision
+    config = prepare_config_mocks
+
+    @deployment.revision = 1234
+    deployer = Webistrano::Deployer.new(@deployment)
+
+    deployer.expects(:exchange_real_revision).returns('1234').times(1)
+    config.expects(:fetch).with(:real_revision).returns('1234').times(2)
+
+    # mock the main exec
+    deployer.expects(:execute_requested_actions).returns(nil)
+
+    deployer.invoke_task!
+
+    assert_equal "1234", deployer.deployment.reload.revision
   end
 
   def test_deployer_sets_pid
