@@ -25,7 +25,7 @@
 
 <fieldset class="fieldset">
   <legend>Recent deployments</legend>
-  <% if @deployments.empty? %>
+  <% if @deployments.nil? || @deployments.empty? %>
     <br/>
       No recent deployments.
     <br/>
