@@ -1,5 +1,6 @@
 class ProjectUsersController < ApplicationController
 
+  protect_from_forgery :except => [:create, :destroy]
   before_filter :load_project
   before_filter :ensure_admin, :only => [:destroy, :create]
 

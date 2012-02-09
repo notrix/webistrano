@@ -1,5 +1,6 @@
 class StageUsersController < ApplicationController
 
+  protect_from_forgery :except => [:create, :destroy]
   before_filter :ensure_admin, :only => [:destroy, :create]
 
   def create
