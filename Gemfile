@@ -1,6 +1,7 @@
 source "http://rubygems.org"
 
 gem "rails", "=2.3.14"
+gem "composite_primary_keys", "~> 2.3.5.1"
 gem "erubis"
 gem "mysql"
 gem "rake"

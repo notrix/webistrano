@@ -1,4 +1,5 @@
 class StagesUser < ActiveRecord::Base
+  set_primary_keys :stage_id, :user_id
   belongs_to :stage
   belongs_to :user
 

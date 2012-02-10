@@ -20,6 +20,8 @@ class StagesUsersTest < ActiveSupport::TestCase
     }
 
     assert_equal 1, StagesUser.count
+
+    assert_equal "#{stage.id},#{@user.id}", StagesUser.find(:first).to_param
   end
 
   def test_validation
