@@ -828,8 +828,8 @@ class Webistrano::DeployerTest < ActiveSupport::TestCase
     deployer = Webistrano::Deployer.new(d)
 
     assert_not_nil deployer.list_tasks
-    assert_equal 25, deployer.list_tasks.size, deployer.list_tasks.map(&:fully_qualified_name).sort.inspect
-    assert_equal 23, @stage.list_tasks.size # filter shell and invoke
+    assert_equal 26, deployer.list_tasks.size, deployer.list_tasks.map(&:fully_qualified_name).sort.inspect
+    assert_equal 24, @stage.list_tasks.size # filter shell and invoke
     deployer.list_tasks.each{|t| assert t.is_a?(Capistrano::TaskDefinition) }
 
     # add a stage recipe
@@ -843,8 +843,8 @@ class Webistrano::DeployerTest < ActiveSupport::TestCase
     recipe = create_new_recipe(:name => 'A new recipe', :body => recipe_body)
     @stage.recipes << recipe
 
-    assert_equal 26, deployer.list_tasks.size
-    assert_equal 24, @stage.list_tasks.size # filter shell and invoke
+    assert_equal 27, deployer.list_tasks.size
+    assert_equal 25, @stage.list_tasks.size # filter shell and invoke
     assert_equal 1, deployer.list_tasks.delete_if{|t| t.fully_qualified_name != 'foo:bar'}.size
     assert_equal 1, @stage.list_tasks.delete_if{|t| t[:name] != 'foo:bar'}.size
   end
