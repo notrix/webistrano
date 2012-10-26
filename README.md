@@ -10,6 +10,8 @@ Webistrano is a Web UI for managing Capistrano deployments.
 It lets you manage projects and their stages like test, production, and staging with different settings.  
 Those stages can then be deployed with Capistrano through Webistrano.
 
+An extra feature to easily deploy Symfony2 projects was added, with the help of Capifony.
+
 
 Installation
 ------------
@@ -64,7 +66,7 @@ Jonathan Weiss <jw@innerewut.de>
 Contributor
 -----------
 
-Jérôme Macias
+Jérôme Macias, Joeri Verdeyen
   
 License
 -------
