@@ -2,7 +2,14 @@ module Webistrano
   module Template
     module PHP
 
-      CONFIG = Webistrano::Template::Base::CONFIG.dup.merge({
+      CONFIG = Webistrano::Template::BasePHP::CONFIG.dup.merge({
+        :clear_cache_dirs => [],
+        :environment => "dev, prod, test",
+        :filters => ["jpegoptim","csstidy","yuijs","yuicss"],
+        :git_enable_submodules => false,
+        :restart_apache => true,
+        :shared_dirs => [],
+        :deploy_to => '/path/to/deployment_base',
       }).freeze
 
       DESC = <<-'EOS'

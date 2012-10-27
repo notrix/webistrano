@@ -1,7 +1,7 @@
 set :rsync_options, '-avlz --delete'
 set :shared_children,   %w(cached-copy sessions logs)
 set :repository_cache, 'cached-copy'
-set :local_cache, "/var/deploys/#{stagename}"
+set :local_cache, "/var/deploys/#{webistrano_project}/#{webistrano_stage}"
 
 before "deploy:finalize_update" , "compress:start"
 after "deploy:create_symlink" , "deploy:deploy_php" , "deploy:cleanup"

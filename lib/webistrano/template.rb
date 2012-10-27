@@ -1,4 +1,5 @@
 require "webistrano/template/base"
+require "webistrano/template/basephp"
 require "webistrano/template/rails"
 require "webistrano/template/mongrel_rails"
 require "webistrano/template/thin_rails"

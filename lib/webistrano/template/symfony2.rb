@@ -2,10 +2,10 @@ module Webistrano
   module Template
     module Symfony2
 
-      CONFIG = Webistrano::Template::Base::CONFIG.dup.merge({
-        :symfony_env_local => 'Symfony environment on local',
-        :symfony_env_prod => 'Symfony environment',
-        :php_bin => 'PHP binary to execute',
+      CONFIG = Webistrano::Template::BasePHP::CONFIG.dup.merge({
+        :symfony_env_local => 'dev',
+        :symfony_env_prod => 'prod',
+        :php_bin => '/usr/bin/php',
         :remote_tmp_dir => '',
         :app_path => "app",
         :web_path => "web",
@@ -25,6 +25,8 @@ module Webistrano
       }
 
       capifony_symfony2 = <<-'EOS'
+        set :local_cache, "/var/deploys/#{webistrano_project}/#{webistrano_stage}"
+
         set :maintenance_basename, "base"
         # Symfony application path
         set :app_path,              "app"
@@ -198,6 +200,10 @@ module Webistrano
 
           if dump_assetic_assets
             symfony.assetic.dump            # Dump assetic assets
+          end
+
+          if permission_method
+            deploy.set_permissions
           end
 
           if clear_controllers
