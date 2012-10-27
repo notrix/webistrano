@@ -13,7 +13,8 @@ class ProjectConfiguration < ConfigurationParameter
       'mod_rails' => Webistrano::Template::ModRails,
       'pure_file' => Webistrano::Template::PureFile,
       'unicorn' => Webistrano::Template::Unicorn,
-      'Symfony2' => Webistrano::Template::Symfony2
+      'Symfony2' => Webistrano::Template::Symfony2,
+      'PHP' => Webistrano::Template::PHP
     }
   end
 
