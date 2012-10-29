@@ -10,3 +10,4 @@ vendor/bundler
 .DS_Store
 *.tmproj
 Gemfile.lock
+public/stylesheets/application.css
