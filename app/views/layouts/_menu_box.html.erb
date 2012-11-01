@@ -4,10 +4,10 @@
       <%= image_tag('peritor_theme/menu_arrow_down.gif', :class => "open", :style => "#{h(show_if_opened(status))};") %>
       <%= image_tag('peritor_theme/menu_arrow_right.gif', :onclick => "closed", :style => "#{h(show_if_closed(status))};") %>
     </div>
-    <div class="menu_title"><%= link_to box_type.capitalize, path %></div>
+    <div class="menu_title"><%= link_to title.capitalize, path %></div>
   </div>
   <div class="menu_box_body">
-    <%= render(:partial => "layouts/#{box_type}", :locals => {:status => status} )%>
+    <%= render(:partial => "layouts/#{box_type}", :locals => {:status => status, :archived => archived } )%>
     <div class="clear"></div>
   </div>
   <div class="menu_box_footer"></div>

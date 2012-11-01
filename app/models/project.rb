@@ -8,10 +8,17 @@ class Project < ActiveRecord::Base
   validates_presence_of :name
   validates_length_of :name, :maximum => 250
   validates_inclusion_of :template, :in => ProjectConfiguration.templates.keys
+  validates_inclusion_of :archived,  :in => [true, false]
 
   after_create :create_template_defaults
 
-  attr_accessible :name, :description, :template
+  attr_accessible :name, :description, :template, :archived
+
+  after_initialize :init
+
+  def init
+    self.archived = false
+  end
 
   # creates the default configuration parameters based on the template
   def create_template_defaults

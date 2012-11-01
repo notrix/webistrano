@@ -11,3 +11,5 @@ vendor/bundler
 *.tmproj
 Gemfile.lock
 public/stylesheets/application.css
+*.sublime-project
+*.sublime-workspace
