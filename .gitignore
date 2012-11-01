@@ -12,3 +12,5 @@ vendor/bundler
 Gemfile.lock
 public/stylesheets/application.css
 unicorn/*
+*.sublime-project
+*.sublime-workspace

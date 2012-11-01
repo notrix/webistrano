@@ -8,6 +8,10 @@
   <%= select('project', 'template', @templates, { :include_blank => false }) %>
 </p>
 <p>
+  <b>Common project</b><br />
+  <%= select('project', 'archived', { 'Yes' => false, 'No' => true } ) %>
+</p>
+<p>
   <b>Description</b><br />
   <%= text_area 'project', 'description', :style =>'width:330px; height: 100px' %>
 </p>

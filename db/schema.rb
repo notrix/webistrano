@@ -62,6 +62,7 @@ ActiveRecord::Schema.define(:version => 20120123214622) do
     t.string   "template"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "archived",    :default => false
   end
 
   create_table "projects_users", :id => false, :force => true do |t|
