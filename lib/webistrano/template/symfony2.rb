@@ -93,7 +93,7 @@ module Webistrano
         set :shared_files,          false
 
         # Dirs that need to remain the same between deploys (shared dirs)
-        set :shared_children,       [log_path, web_path + "/uploads"]
+        set :shared_children,       [log_path]
 
         # Asset folders (that need to be timestamped)
         set :asset_children,        [web_path + "/css", web_path + "/images", web_path + "/js"]
