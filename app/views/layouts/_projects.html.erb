@@ -1,10 +1,5 @@
 <% if current_user.admin? %>
-  <% if archived == true %>
-  <% projects = current_user.admin? ? Project.find(:all, :conditions => { :archived => true }, :order => "name ASC") : current_user.projects %>
-  <% else %>
   <% projects = current_user.admin? ? Project.find(:all, :conditions => { :archived => false }, :order => "name ASC") : current_user.projects %>
-  <% end %>
-
 <% else %>
   <% projects = current_user.projects %>
 <% end %>
@@ -38,15 +33,10 @@
       </div>
     <% end %>
   <% else %>
-    <% if archived == true %>
-      <div class="menu_item">No archived projects yet</div>
-    <% else %>
-      <div class="menu_item">No projects yet</div>
-      <% if current_user.admin? %>
-        <a href="<%= new_project_path %>" class="menu_link menu_link_create">New project</a>
-      <% end %>
+    <div class="menu_item">No current projects yet</div>
+    <% if current_user.admin? %>
+      <a href="<%= new_project_path %>" class="menu_link menu_link_create"><div class="menu_link_title">New project</div></a>
     <% end %>
-
   <% end %>
 </div>
 <div class="closed" style="<%= show_if_closed(status) %>">

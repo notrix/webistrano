@@ -20,7 +20,13 @@ class ProjectsController < ApplicationController
   # GET /projects
   # GET /projects.xml
   def index
-    @projects = self.current_user.admin? ? Project.find(:all, :order => 'name ASC') : self.current_user.projects
+    if self.current_user.admin?
+      @current_projects = Project.find(:all, :conditions => { :archived => false }, :order => 'name ASC')
+      @archived_projects =  Project.find(:all, :conditions => { :archived => true },  :order => 'name ASC')
+    else
+      @current_projects =  self.current_user.project
+      @archived_projects = []
+    end
 
     respond_to do |format|
       format.html # index.rhtml

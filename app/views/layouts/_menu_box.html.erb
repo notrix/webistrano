@@ -7,7 +7,7 @@
     <div class="menu_title"><%= link_to title.capitalize, path %></div>
   </div>
   <div class="menu_box_body">
-    <%= render(:partial => "layouts/#{box_type}", :locals => {:status => status, :archived => archived } )%>
+    <%= render(:partial => "layouts/#{box_type}", :locals => {:status => status } )%>
     <div class="clear"></div>
   </div>
   <div class="menu_box_footer"></div>

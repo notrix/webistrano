@@ -1,0 +1,11 @@
+<% projects = current_user.admin? ? Project.find(:all, :conditions => { :archived => true }, :order => "name ASC") : current_user.projects %>
+
+<div class="">
+  <div class="menu_link_title">
+    <% if projects.count > 0 %>
+      <%= pluralize(projects.count, 'project')%> archived
+    <% else %>
+      No archived projects
+    <% end %>
+  </div>
+</div>
