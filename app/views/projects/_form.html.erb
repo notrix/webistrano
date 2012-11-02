@@ -8,8 +8,8 @@
   <%= select('project', 'template', @templates, { :include_blank => false }) %>
 </p>
 <p>
-  <b>Common project</b><br />
-  <%= select('project', 'archived', { 'Yes' => false, 'No' => true } ) %>
+  <b>Archive project</b><br />
+  <%= select('project', 'archived', {  'No' => false, 'Yes' => true } ) %>
 </p>
 <p>
   <b>Description</b><br />
