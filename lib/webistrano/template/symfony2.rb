@@ -10,7 +10,8 @@ module Webistrano
         :app_path => "app",
         :web_path => "web",
         :app_config_file =>"parameters.yml",
-        :update_assets_version => false
+        :update_assets_version => false,
+        :clear_controllers => true
       }).freeze
 
       DESC = <<-'EOS'
@@ -85,9 +86,6 @@ module Webistrano
 
         # Whether to update `assets_version` in `config.yml`
         set :update_assets_version, true
-
-        # Need to clear *_dev controllers
-        set :clear_controllers,     true
 
         # Files that need to remain the same between deploys
         set :shared_files,          false
