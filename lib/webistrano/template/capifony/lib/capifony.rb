@@ -1,9 +1,3 @@
-# Symfony environment on local
-set :symfony_env_local, "dev"
-
-# Symfony environment
-set :symfony_env_prod,  "prod"
-
 # PHP binary to execute
 set :php_bin,           "php"
 
