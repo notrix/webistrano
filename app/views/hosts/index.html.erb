@@ -5,12 +5,14 @@
 
 <table class="sortable">
   <tr>
-    <th width="34%">Name</th>
+    <th width="34%">Alias</th>
+    <th width="34%">DNS/IP</th>
     <th width="33%">#Stages</th>
     <th width="33%">#Roles</th>
   </tr>
   <% for host in @hosts %>
     <tr class="<%= cycle :even, :odd  %>">
+      <td><%= host.alias %></td>
       <td><%= link_to h(host.name), host_path(host) %></td>
       <td><%=h host.stages.count %></td>
       <td><%=h host.roles.count %></td>

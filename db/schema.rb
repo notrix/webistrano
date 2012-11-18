@@ -51,6 +51,7 @@ ActiveRecord::Schema.define(:version => 20120123214622) do
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "alias",      :default => ""
   end
 
   create_table "project_configurations", :force => true do |t|

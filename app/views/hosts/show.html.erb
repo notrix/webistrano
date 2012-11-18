@@ -8,9 +8,13 @@
   <div class="box_top"></div>
   <div class="box_middle">
 		<p>
-		  <b>Name:</b>
+		  <b>DNS name / IP address:</b>
 		  <%=h @host.name %>
 		</p>
+    <p>
+      <b>Alias:</b>
+      <%=h @host.alias %>
+    </p>
 		<p>
 		  <b>#Stages:</b>
 		  <%=h @host.stages.uniq.size %>
@@ -21,7 +25,7 @@
 		</p>
 		<% if current_user.admin? %>
   		<br />
-	  	<%= link_to 'Edit Host', edit_host_path(@host), :class => 'arrow_link' %> | 
+	  	<%= link_to 'Edit Host', edit_host_path(@host), :class => 'arrow_link' %> |
 		  <%= link_to 'Delete', host_path(@host), :confirm => 'Are you sure?', :method => :delete, :class => 'arrow_link'  %>
 		<% end %>
   </div>
@@ -39,12 +43,12 @@
 <% content_for(:breadcrumb) do %>
   <% breadcrumb_box do %>
     <%= link_to "Manage hosts", hosts_path, :style => "float:right", :class => "arrow_link" %>
-    <%= link_to "Hosts", hosts_path %> &gt; 
-    Host <%= link_to @host.name, host_path(@host) %> 
+    <%= link_to "Hosts", hosts_path %> &gt;
+    Host <%= link_to @host.alias, host_path(@host) %>
   <% end %>
 <% end %>
 
 <% content_for(:page_title) do %>
-  <% @page_title = "Host #{h(@host.name)}" %>
-  <h2>Host <%=h @host.name %></h2>
+  <% @page_title = "Host #{h(@host.alias)} (#{h(@host.name)})" %>
+  <h2>Host <%=h @host.alias %> (<%=h @host.name %>)</h2>
 <% end %>
