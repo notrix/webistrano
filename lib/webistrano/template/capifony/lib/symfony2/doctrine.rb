@@ -69,9 +69,16 @@ namespace :symfony do
       end
     end
 
+    namespace :fixtures do
+      desc "Load data fixtures"
+      task :load, :roles => :app, :except => { :no_release => true } do
+        run "#{try_sudo} sh -c 'cd #{latest_release} && #{php_bin} #{symfony_console} doctrine:fixtures:load --env=#{symfony_env_prod}'", :once => true
+      end
+    end
+
     namespace :migrations do
       desc "Executes a migration to a specified version or the latest available version"
-      task :migrate, :roles => :app, :except => { :no_release => true } do
+      task :migrate, :roles => :app, :only => { :primary => true }, :except => { :no_release => true } do
         currentVersion = nil
         run "#{try_sudo} sh -c 'cd #{latest_release} && #{php_bin} #{symfony_console} --no-ansi doctrine:migrations:status --env=#{symfony_env_prod}'", :once => true do |ch, stream, out|
           if stream == :out and out =~ /Current Version:.+\(([\w]+)\)/

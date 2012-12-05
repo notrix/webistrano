@@ -6,10 +6,10 @@ module Webistrano
         :symfony_env_local => 'dev',
         :symfony_env_prod => 'prod',
         :php_bin => '/usr/bin/php',
-        :remote_tmp_dir => '',
+        :remote_tmp_dir => '/tmp',
         :app_path => "app",
         :web_path => "web",
-        :app_config_file =>"parameters.yml",
+        :app_config_file => "parameters.yml",
         :update_assets_version => false,
         :clear_controllers => true
       }).freeze
@@ -26,9 +26,12 @@ module Webistrano
       }
 
       capifony_symfony2 = <<-'EOS'
-        set :local_cache, "/var/deploys/#{webistrano_project}/#{webistrano_stage}"
 
-        set :maintenance_basename, "base"
+        set :local_cache_path, "/var/deploys/#{webistrano_project}/"
+        set :local_cache, "#{local_cache_path}/#{webistrano_stage}"
+
+        set :maintenance_basename, 'maintenance'
+
         # Symfony application path
         set :app_path,              "app"
 
@@ -73,6 +76,9 @@ module Webistrano
         # run bin/vendors script in mode (upgrade, install (faster if shared /vendor folder) or reinstall)
         set :vendors_mode,          "reinstall"
 
+        # Copy vendors from previous release
+        set :copy_vendors,          true
+
         # Whether to run cache warmup
         set :cache_warmup,          true
 
@@ -84,8 +90,8 @@ module Webistrano
         set :assets_symlinks,       true
         set :assets_relative,       false
 
-        # Whether to update `assets_version` in `config.yml`
-        set :update_assets_version, true
+        # Controllers to clear
+        set :controllers_to_clear, ['app_*.php']
 
         # Files that need to remain the same between deploys
         set :shared_files,          false
@@ -104,6 +110,9 @@ module Webistrano
 
         # Method used to set permissions (:chmod, :acl, or :chown)
         set :permission_method,     :acl
+
+        # Execute set permissions
+        set :use_set_permissions,   true
 
         # Model manager: (doctrine, propel)
         set :model_manager,         "doctrine"
@@ -156,6 +165,14 @@ module Webistrano
           $error = false
         end
 
+        ["symfony:composer:install", "symfony:composer:update"].each do |action|
+          before action do
+            if copy_vendors
+              symfony.composer.copy_vendors
+            end
+          end
+        end
+
         after "deploy:finalize_update" do
           if use_composer
             if update_vendors
@@ -175,6 +192,10 @@ module Webistrano
           end
 
           symfony.bootstrap.build
+
+          if use_set_permissions
+            symfony.deploy.set_permissions
+          end
 
           if model_manager == "propel"
             symfony.propel.build.model
@@ -200,11 +221,12 @@ module Webistrano
             symfony.assetic.dump            # Dump assetic assets
           end
 
-          if permission_method
-            deploy.set_permissions
-          end
-
           if clear_controllers
+            # If clear_controllers is an array set controllers_to_clear,
+            # else use the default value 'app_*.php'
+            if clear_controllers.is_a? Array
+              set(:controllers_to_clear) { clear_controllers }
+            end
             symfony.project.clear_controllers
           end
         end
@@ -212,6 +234,8 @@ module Webistrano
         before "deploy:update_code" do
           msg = "--> Updating code base with #{deploy_via} strategy"
           logger.info msg
+          sudo "mkdir -p #{local_cache_path}"
+          sudo "chown -R #{user} #{local_cache_path}"
         end
 
         after "deploy:create_symlink" do

@@ -1,6 +1,36 @@
-### 2.2.1 / ???
+### 2.2.4 / ???
 
 n/a
+
+### 2.2.3 / November 28, 2012
+
+* #273. Create only one run call in the task and Tests
+* #273. Make mor flexible clear_controllers
+* Ensure the remote database password is not logged in plaintext
+* Create a new variable to allow execute set_permissions automatically
+
+### 2.2.2 / November 13, 2012
+
+* test when running symfony:composer:{install,update} with enabled copy_vendors
+* Fix missing #{php_bin} variables
+* Added optional symfony:composer:copy_vendors
+
+### 2.2.1 / November 2, 2012
+
+* Move warn message to the description. Fix #201
+* Update README (tests)
+* Updated capistrano-maintenance version
+* IMPORTANT: Fix maintenance tasks by adding a new dependency (capistrano-maintenance)
+* Fix test, add more tests for the composer copy feature
+* fix tests
+* Update spec/capifony_symfony2_symfony_spec.rb
+* Update lib/symfony2/symfony.rb
+* Update lib/symfony2/symfony.rb
+* Ignore "No such file or directory" on deploy:web:enable
+* Added doctrine:fixtures:load
+* [symfony1] Fix bad command with use_sudo = false
+* Refactor symfony:vendors and symfony:cache tasks based on @leek work
+* Fix composer tasks
 
 ### 2.2.0 / October 22, 2012
 

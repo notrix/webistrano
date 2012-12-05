@@ -1,8 +1,3 @@
-# PHP binary to execute
-set :php_bin,           "php"
-
-set :remote_tmp_dir,    "/tmp"
-
 def prompt_with_default(var, default, &block)
   set(var) do
     Capistrano::CLI.ui.ask("#{var} [#{default}] : ", &block)

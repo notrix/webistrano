@@ -25,7 +25,7 @@ namespace :symfony do
   namespace :assets do
     desc "Updates assets version (in config.yml)"
     task :update_version, :roles => :app, :except => { :no_release => true } do
-      run "#{try_sudo} sed -i 's/\\(assets_version: \\)\\([a-zA-Z0-9_]*\\)\\(.*\\)$/\\1 \"#{real_revision[0,7]}\"\\3/g' #{latest_release}/#{app_path}/config/config.yml"
+      run "#{try_sudo} sed -i 's/\\(assets_version:[ ]*\\)\\([a-zA-Z0-9_]*\\)\\(.*\\)$/\\1#{real_revision[0,7]}\\3/g' #{latest_release}/#{app_config_path}/config.yml"
     end
 
     desc "Installs bundle's assets"
@@ -96,6 +96,12 @@ namespace :symfony do
   namespace :composer do
     desc "Gets composer and installs it"
     task :get, :roles => :app, :except => { :no_release => true } do
+      if remote_file_exists?("#{previous_release}/composer.phar")
+        capifony_pretty_print "--> Copying Composer from previous release"
+        run "#{try_sudo} sh -c 'cp #{previous_release}/composer.phar #{latest_release}/'"
+        capifony_puts_ok
+      end
+
       if !remote_file_exists?("#{latest_release}/composer.phar")
         capifony_pretty_print "--> Downloading Composer"
 
@@ -156,6 +162,13 @@ namespace :symfony do
       run "#{try_sudo} sh -c 'cd #{latest_release} && #{composer_bin} dump-autoload --optimize'"
       capifony_puts_ok
     end
+
+    task :copy_vendors, :except => { :no_release => true } do
+      capifony_pretty_print "--> Copying vendors from previous release"
+
+      run "vendorDir=#{current_path}/vendor; if [ -d $vendorDir ] || [ -h $vendorDir ]; then cp -a $vendorDir #{latest_release}/vendor; fi;"
+      capifony_puts_ok
+    end
   end
 
   namespace :cache do
@@ -181,7 +194,12 @@ namespace :symfony do
     task :clear_controllers do
       capifony_pretty_print "--> Clear controllers"
 
-      run "#{try_sudo} sh -c 'cd #{latest_release} && rm -f #{web_path}/app_*.php'"
+      command = "#{try_sudo} sh -c 'cd #{latest_release} && rm -f"
+      controllers_to_clear.each do |link|
+        command += " #{web_path}/" + link
+      end
+      run command + "'"
+
       capifony_puts_ok
     end
   end

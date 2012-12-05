@@ -1,5 +1,6 @@
 # encoding: utf-8
 require 'capistrano'
+require 'capistrano/maintenance'
 require 'colored'
 require 'fileutils'
 require 'inifile'
@@ -64,6 +65,9 @@ module Capifony
         # run bin/vendors script in mode (upgrade, install (faster if shared /vendor folder) or reinstall)
         set :vendors_mode,          "reinstall"
 
+        # Copy vendors from previous release
+        set :copy_vendors,          false
+
         # Whether to run cache warmup
         set :cache_warmup,          true
 
@@ -80,6 +84,9 @@ module Capifony
 
         # Need to clear *_dev controllers
         set :clear_controllers,     true
+
+        # Controllers to clear
+        set :controllers_to_clear, ['app_*.php']
 
         # Files that need to remain the same between deploys
         set :shared_files,          false
@@ -98,6 +105,9 @@ module Capifony
 
         # Method used to set permissions (:chmod, :acl, or :chown)
         set :permission_method,     false
+
+        # Execute set permissions
+        set :use_set_permissions,   false
 
         # Model manager: (doctrine, propel)
         set :model_manager,         "doctrine"
@@ -181,6 +191,14 @@ module Capifony
           end
         end
 
+        ["symfony:composer:install", "symfony:composer:update"].each do |action|
+          before action do
+            if copy_vendors
+              symfony.composer.copy_vendors
+            end
+          end
+        end
+
         after "deploy:finalize_update" do
           if use_composer
             if update_vendors
@@ -200,6 +218,10 @@ module Capifony
           end
 
           symfony.bootstrap.build
+
+          if use_set_permissions
+            symfony.deploy.set_permissions
+          end
 
           if model_manager == "propel"
             symfony.propel.build.model
@@ -226,6 +248,11 @@ module Capifony
           end
 
           if clear_controllers
+            # If clear_controllers is an array set controllers_to_clear,
+            # else use the default value 'app_*.php'
+            if clear_controllers.is_a? Array
+              set(:controllers_to_clear) { clear_controllers }
+            end
             symfony.project.clear_controllers
           end
         end
