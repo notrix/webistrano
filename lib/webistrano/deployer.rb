@@ -124,6 +124,11 @@ module Webistrano
 
       load_project_template_tasks(config)
       load_stage_custom_recipes(config)
+
+      if deployment.stage.project.template == "Symfony2"
+        set_stage_configuration(config)
+      end
+
       config
     end
 

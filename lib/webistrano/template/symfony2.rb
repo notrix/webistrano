@@ -11,7 +11,15 @@ module Webistrano
         :web_path => "web",
         :app_config_file => "parameters.yml",
         :update_assets_version => false,
-        :clear_controllers => true
+        :clear_controllers => true,
+        :use_composer => true,
+        :copy_vendors => true,
+        :dump_assetic_assets => true,
+        :assets_symlinks => true,
+        :update_assets_version => true,
+        :clear_controllers => true,
+        :permission_method => :acl,
+        :use_set_permissions => true
       }).freeze
 
       DESC = <<-'EOS'
