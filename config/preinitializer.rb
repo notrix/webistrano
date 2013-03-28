@@ -1,5 +1,9 @@
 begin
   require "rubygems"
+
+  # Found this fix here: https://github.com/rubygems/rubygems/issues/145
+  # I know, not a good idea, but does the job for now.
+  Gem::Deprecate.skip = true
   require "bundler"
 rescue LoadError
   raise "Could not load the bundler gem. Install it with `gem install bundler`."

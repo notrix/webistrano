@@ -9,3 +9,6 @@ namespace :test do
 
 end
 
+task :generate_session_store do
+  puts "Change the key yourself in : config/initializers/session_store.rb"
+end

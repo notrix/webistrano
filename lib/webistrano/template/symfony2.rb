@@ -18,7 +18,7 @@ module Webistrano
         :assets_symlinks => true,
         :update_assets_version => true,
         :clear_controllers => true,
-        :permission_method => :acl,
+        :permission_method => ":acl",
         :use_set_permissions => true
       }).freeze
 
