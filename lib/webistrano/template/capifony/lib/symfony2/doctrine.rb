@@ -5,7 +5,13 @@ namespace :symfony do
       task :clear_metadata, :roles => :app, :except => { :no_release => true } do
         capifony_pretty_print "--> Clearing Doctrine metadata cache"
 
-        run "#{try_sudo} sh -c 'cd #{latest_release} && #{php_bin} #{symfony_console} doctrine:cache:clear-metadata --env=#{symfony_env_prod}'"
+        if doctrine_clear_use_flush_option
+            flush_option = " --flush"
+        else
+            flush_option = ""
+        end
+
+        run "#{try_sudo} sh -c 'cd #{latest_release} && #{php_bin} #{symfony_console} doctrine:cache:clear-metadata --env=#{symfony_env_prod}#{doctrine_em_flag}#{flush_option}'"
         capifony_puts_ok
       end
 
@@ -13,7 +19,13 @@ namespace :symfony do
       task :clear_query, :roles => :app, :except => { :no_release => true } do
         capifony_pretty_print "--> Clearing Doctrine query cache"
 
-        run "#{try_sudo} sh -c 'cd #{latest_release} && #{php_bin} #{symfony_console} doctrine:cache:clear-query --env=#{symfony_env_prod}'"
+        if doctrine_clear_use_flush_option
+            flush_option = " --flush"
+        else
+            flush_option = ""
+        end
+        
+        run "#{try_sudo} sh -c 'cd #{latest_release} && #{php_bin} #{symfony_console} doctrine:cache:clear-query --env=#{symfony_env_prod}#{doctrine_em_flag}#{flush_option}'"
         capifony_puts_ok
       end
 
@@ -21,25 +33,34 @@ namespace :symfony do
       task :clear_result, :roles => :app, :except => { :no_release => true } do
         capifony_pretty_print "--> Clearing Doctrine result cache"
 
-        run "#{try_sudo} sh -c 'cd #{latest_release} && #{php_bin} #{symfony_console} doctrine:cache:clear-result --env=#{symfony_env_prod}'"
+        if doctrine_clear_use_flush_option
+            flush_option = " --flush"
+        else
+            flush_option = ""
+        end
+        
+        run "#{try_sudo} sh -c 'cd #{latest_release} && #{php_bin} #{symfony_console} doctrine:cache:clear-result --env=#{symfony_env_prod}#{doctrine_em_flag}#{flush_option}'"
         capifony_puts_ok
       end
     end
 
     namespace :database do
-      [:create, :drop].each do |action|
-        desc "#{action.to_s.capitalize}s the configured databases"
-        task action, :roles => :app, :except => { :no_release => true } do
-          case action.to_s
-          when "create"
-            capifony_pretty_print "--> Creating databases"
-          when "drop"
-            capifony_pretty_print "--> Dropping databases"
-          end
+      desc "Drops the configured databases"
+      task :drop, :roles => :app, :except => { :no_release => true } do
+        capifony_pretty_print "--> Dropping databases"
 
-          run "#{try_sudo} sh -c 'cd #{latest_release} && #{php_bin} #{symfony_console} doctrine:database:#{action.to_s} --env=#{symfony_env_prod}'", :once => true
-          capifony_puts_ok
+        if !interactive_mode || Capistrano::CLI.ui.agree("Do you really want to drop #{symfony_env_prod}'s database? (y/N)")
+          run "#{try_sudo} sh -c 'cd #{latest_release} && #{php_bin} #{symfony_console} doctrine:database:drop --force --env=#{symfony_env_prod}'", :once => true
         end
+        capifony_puts_ok
+      end
+      
+      desc "Creates the configured databases"
+      task :create, :roles => :app, :except => { :no_release => true } do
+        capifony_pretty_print "--> Creating databases"
+
+        run "#{try_sudo} sh -c 'cd #{latest_release} && #{php_bin} #{symfony_console} doctrine:database:create --env=#{symfony_env_prod}'", :once => true
+        capifony_puts_ok
       end
     end
 
@@ -48,7 +69,7 @@ namespace :symfony do
       task :create, :roles => :app, :except => { :no_release => true } do
         capifony_pretty_print "--> Creating schema"
 
-        run "#{try_sudo} sh -c 'cd #{latest_release} && #{php_bin} #{symfony_console} doctrine:schema:create --env=#{symfony_env_prod}'", :once => true
+        run "#{try_sudo} sh -c 'cd #{latest_release} && #{php_bin} #{symfony_console} doctrine:schema:create --env=#{symfony_env_prod}#{doctrine_em_flag}'", :once => true
         capifony_puts_ok
       end
 
@@ -56,7 +77,9 @@ namespace :symfony do
       task :drop, :roles => :app, :except => { :no_release => true } do
         capifony_pretty_print "--> Droping schema"
 
-        run "#{try_sudo} sh -c 'cd #{latest_release} && #{php_bin} #{symfony_console} doctrine:schema:drop --env=#{symfony_env_prod}'", :once => true
+        if !interactive_mode || Capistrano::CLI.ui.agree("Do you really want to drop #{symfony_env_prod}'s database schema? (y/N)")
+          run "#{try_sudo} sh -c 'cd #{latest_release} && #{php_bin} #{symfony_console} doctrine:schema:drop --force --env=#{symfony_env_prod}#{doctrine_em_flag}'", :once => true
+        end
         capifony_puts_ok
       end
 
@@ -64,23 +87,21 @@ namespace :symfony do
       task :update, :roles => :app, :except => { :no_release => true } do
         capifony_pretty_print "--> Updating schema"
 
-        run "#{try_sudo} sh -c 'cd #{latest_release} && #{php_bin} #{symfony_console} doctrine:schema:update --force --env=#{symfony_env_prod}'", :once => true
+        run "#{try_sudo} sh -c 'cd #{latest_release} && #{php_bin} #{symfony_console} doctrine:schema:update --force --env=#{symfony_env_prod}#{doctrine_em_flag}'", :once => true
         capifony_puts_ok
       end
     end
 
-    namespace :fixtures do
-      desc "Load data fixtures"
-      task :load, :roles => :app, :except => { :no_release => true } do
-        run "#{try_sudo} sh -c 'cd #{latest_release} && #{php_bin} #{symfony_console} doctrine:fixtures:load --env=#{symfony_env_prod}'", :once => true
-      end
+    desc "Load data fixtures"
+    task :load_fixtures, :roles => :app, :except => { :no_release => true } do
+      run "#{try_sudo} sh -c 'cd #{latest_release} && #{php_bin} #{symfony_console} doctrine:fixtures:load --env=#{symfony_env_prod}#{doctrine_em_flag}'", :once => true
     end
 
     namespace :migrations do
       desc "Executes a migration to a specified version or the latest available version"
       task :migrate, :roles => :app, :only => { :primary => true }, :except => { :no_release => true } do
         currentVersion = nil
-        run "#{try_sudo} sh -c 'cd #{latest_release} && #{php_bin} #{symfony_console} --no-ansi doctrine:migrations:status --env=#{symfony_env_prod}'", :once => true do |ch, stream, out|
+        run "#{try_sudo} sh -c 'cd #{latest_release} && #{php_bin} #{symfony_console} --no-ansi doctrine:migrations:status --env=#{symfony_env_prod}#{doctrine_em_flag}'", :once => true do |ch, stream, out|
           if stream == :out and out =~ /Current Version:.+\(([\w]+)\)/
             currentVersion = Regexp.last_match(1)
           end
@@ -96,18 +117,18 @@ namespace :symfony do
 
         on_rollback {
           if !interactive_mode || Capistrano::CLI.ui.agree("Do you really want to migrate #{symfony_env_prod}'s database back to version #{currentVersion}? (y/N)")
-            run "#{try_sudo} sh -c 'cd #{latest_release} && #{php_bin} #{symfony_console} doctrine:migrations:migrate #{currentVersion} --env=#{symfony_env_prod} --no-interaction'", :once => true
+            run "#{try_sudo} sh -c 'cd #{latest_release} && #{php_bin} #{symfony_console} doctrine:migrations:migrate #{currentVersion} --env=#{symfony_env_prod} --no-interaction#{doctrine_em_flag}'", :once => true
           end
         }
 
         if !interactive_mode || Capistrano::CLI.ui.agree("Do you really want to migrate #{symfony_env_prod}'s database? (y/N)")
-          run "#{try_sudo} sh -c ' cd #{latest_release} && #{php_bin} #{symfony_console} doctrine:migrations:migrate --env=#{symfony_env_prod} --no-interaction'", :once => true
+          run "#{try_sudo} sh -c ' cd #{latest_release} && #{php_bin} #{symfony_console} doctrine:migrations:migrate --env=#{symfony_env_prod} --no-interaction#{doctrine_em_flag}'", :once => true
         end
       end
 
       desc "Views the status of a set of migrations"
       task :status, :roles => :app, :except => { :no_release => true } do
-        run "#{try_sudo} sh -c 'cd #{latest_release} && #{php_bin} #{symfony_console} doctrine:migrations:status --env=#{symfony_env_prod}'", :once => true
+        run "#{try_sudo} sh -c 'cd #{latest_release} && #{php_bin} #{symfony_console} doctrine:migrations:status --env=#{symfony_env_prod}#{doctrine_em_flag}'", :once => true
       end
     end
 

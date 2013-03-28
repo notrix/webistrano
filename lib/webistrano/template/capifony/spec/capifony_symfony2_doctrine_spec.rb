@@ -12,6 +12,8 @@ describe "Capifony::Symfony2 - doctrine" do
     @configuration.set :try_sudo,             ''
 
     Capifony::Symfony2.load_into(@configuration)
+
+    @configuration.set :interactive_mode,     false
   end
 
   subject { @configuration }
@@ -64,7 +66,7 @@ describe "Capifony::Symfony2 - doctrine" do
       @configuration.find_and_execute_task('symfony:doctrine:database:drop')
     end
 
-    it { should have_run(' sh -c \'cd /var/www/releases/20120927 && php app/console doctrine:database:drop --env=prod\'') }
+    it { should have_run(' sh -c \'cd /var/www/releases/20120927 && php app/console doctrine:database:drop --force --env=prod\'') }
   end
 
   it "defines symfony:doctrine:schema tasks" do
@@ -86,7 +88,7 @@ describe "Capifony::Symfony2 - doctrine" do
       @configuration.find_and_execute_task('symfony:doctrine:schema:drop')
     end
 
-    it { should have_run(' sh -c \'cd /var/www/releases/20120927 && php app/console doctrine:schema:drop --env=prod\'') }
+    it { should have_run(' sh -c \'cd /var/www/releases/20120927 && php app/console doctrine:schema:drop --force --env=prod\'') }
   end
 
   context "when running symfony:doctrine:schema:update" do
@@ -95,6 +97,18 @@ describe "Capifony::Symfony2 - doctrine" do
     end
 
     it { should have_run(' sh -c \'cd /var/www/releases/20120927 && php app/console doctrine:schema:update --force --env=prod\'') }
+  end
+
+  it "defines symfony:doctrine:load_fixtures task" do
+    @configuration.find_task('symfony:doctrine:load_fixtures').should_not == nil
+  end
+
+  context "when running symfony:doctrine:load_fixtures" do
+    before do
+      @configuration.find_and_execute_task('symfony:doctrine:load_fixtures')
+    end
+
+    it { should have_run(' sh -c \'cd /var/www/releases/20120927 && php app/console doctrine:fixtures:load --env=prod\'') }
   end
 
   it "defines symfony:doctrine:migrations tasks" do
@@ -169,4 +183,43 @@ describe "Capifony::Symfony2 - doctrine" do
 
     it { should have_run(' sh -c \'cd /var/www/releases/20120927 && php app/console init:acl --env=prod\'') }
   end
+
+  context "when running symfony:doctrine:* with custom entity manager" do
+    before do
+      @configuration.set :doctrine_em, 'custom_em'
+
+      @configuration.find_and_execute_task('symfony:doctrine:cache:clear_metadata')
+      @configuration.find_and_execute_task('symfony:doctrine:cache:clear_query')
+      @configuration.find_and_execute_task('symfony:doctrine:cache:clear_result')
+      @configuration.find_and_execute_task('symfony:doctrine:schema:create')
+      @configuration.find_and_execute_task('symfony:doctrine:schema:drop')
+      @configuration.find_and_execute_task('symfony:doctrine:schema:update')
+      @configuration.find_and_execute_task('symfony:doctrine:load_fixtures')
+      @configuration.find_and_execute_task('symfony:doctrine:migrations:status')
+    end
+
+    it { should have_run(' sh -c \'cd /var/www/releases/20120927 && php app/console doctrine:cache:clear-metadata --env=prod --em=custom_em\'') }
+    it { should have_run(' sh -c \'cd /var/www/releases/20120927 && php app/console doctrine:cache:clear-query --env=prod --em=custom_em\'') }
+    it { should have_run(' sh -c \'cd /var/www/releases/20120927 && php app/console doctrine:cache:clear-result --env=prod --em=custom_em\'') }
+    it { should have_run(' sh -c \'cd /var/www/releases/20120927 && php app/console doctrine:schema:create --env=prod --em=custom_em\'') }
+    it { should have_run(' sh -c \'cd /var/www/releases/20120927 && php app/console doctrine:schema:drop --force --env=prod --em=custom_em\'') }
+    it { should have_run(' sh -c \'cd /var/www/releases/20120927 && php app/console doctrine:schema:update --force --env=prod --em=custom_em\'') }
+    it { should have_run(' sh -c \'cd /var/www/releases/20120927 && php app/console doctrine:fixtures:load --env=prod --em=custom_em\'') }
+    it { should have_run(' sh -c \'cd /var/www/releases/20120927 && php app/console doctrine:migrations:status --env=prod --em=custom_em\'') }
+  end
+  
+  context "when running symfony:doctrine:clear_* with flush option" do
+    before do
+      @configuration.set :doctrine_clear_use_flush_option, true
+
+      @configuration.find_and_execute_task('symfony:doctrine:cache:clear_metadata')
+      @configuration.find_and_execute_task('symfony:doctrine:cache:clear_query')
+      @configuration.find_and_execute_task('symfony:doctrine:cache:clear_result')
+    end
+
+    it { should have_run(' sh -c \'cd /var/www/releases/20120927 && php app/console doctrine:cache:clear-metadata --env=prod --flush\'') }
+    it { should have_run(' sh -c \'cd /var/www/releases/20120927 && php app/console doctrine:cache:clear-query --env=prod --flush\'') }
+    it { should have_run(' sh -c \'cd /var/www/releases/20120927 && php app/console doctrine:cache:clear-result --env=prod --flush\'') }
+  end
+
 end

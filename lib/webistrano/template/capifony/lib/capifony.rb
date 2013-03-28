@@ -1,3 +1,14 @@
+# Symfony environment on local
+set :symfony_env_local, "dev"
+
+# Symfony environment
+set :symfony_env_prod,  "prod"
+
+# PHP binary to execute
+set :php_bin,           "php"
+
+set :remote_tmp_dir,    "/tmp"
+
 def prompt_with_default(var, default, &block)
   set(var) do
     Capistrano::CLI.ui.ask("#{var} [#{default}] : ", &block)

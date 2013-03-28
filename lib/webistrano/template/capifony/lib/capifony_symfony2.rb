@@ -57,7 +57,7 @@ module Capifony
         set :composer_bin,          false
 
         # Options to pass to composer when installing/updating
-        set :composer_options,      "--no-scripts --verbose --prefer-dist"
+        set :composer_options,      "--no-scripts --verbose --prefer-dist --optimize-autoloader"
 
         # Whether to update vendors using the configured dependency manager (composer or bin/vendors)
         set :update_vendors,        false
@@ -111,6 +111,12 @@ module Capifony
 
         # Model manager: (doctrine, propel)
         set :model_manager,         "doctrine"
+
+        # Doctrine custom entity manager
+        set :doctrine_em,           false
+        
+        # Use --flush option in doctrine:clear_* task 
+        set :doctrine_clear_use_flush_option, false
 
         # Symfony2 version
         set(:symfony_version)       { guess_symfony_version }
@@ -191,6 +197,22 @@ module Capifony
           end
         end
 
+        [
+          "symfony:doctrine:cache:clear_metadata",
+          "symfony:doctrine:cache:clear_query",
+          "symfony:doctrine:cache:clear_result",
+          "symfony:doctrine:schema:create",
+          "symfony:doctrine:schema:drop",
+          "symfony:doctrine:schema:update",
+          "symfony:doctrine:load_fixtures",
+          "symfony:doctrine:migrations:migrate",
+          "symfony:doctrine:migrations:status",
+        ].each do |action|
+          before action do
+            set :doctrine_em_flag, doctrine_em ? " --em=#{doctrine_em}" : ""
+          end
+        end
+
         ["symfony:composer:install", "symfony:composer:update"].each do |action|
           before action do
             if copy_vendors
@@ -231,12 +253,12 @@ module Capifony
             symfony.composer.dump_autoload
           end
 
-          if assets_install
-            symfony.assets.install          # Publish bundle assets
-          end
-
           if update_assets_version
             symfony.assets.update_version   # Update `assets_version`
+          end
+
+          if assets_install
+            symfony.assets.install          # Publish bundle assets
           end
 
           if cache_warmup

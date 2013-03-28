@@ -5,7 +5,7 @@ require 'fileutils'
 
 symfony_version  = nil
 symfony_app_path = 'app'
-capifony_version = '2.2.4.dev'
+capifony_version = '2.2.9.dev'
 
 OptionParser.new do |opts|
   opts.banner = "Usage: #{File.basename($0)} [path]"
@@ -20,7 +20,7 @@ OptionParser.new do |opts|
     exit 0
   end
 
-  opts.on("-s", "--symfony VERSION", "Capify specific symfony verion (1|2)") do |version|
+  opts.on("-s", "--symfony VERSION", "Capify specific symfony version (1|2)") do |version|
     symfony_version = version.to_i
   end
 
@@ -122,7 +122,7 @@ files.each do |file, content|
   else
     unless File.exists?(File.dirname(file))
       puts "[add] making directory '#{File.dirname(file)}'"
-      FileUtils.mkdir(File.dirname(file))
+      FileUtils.mkdir_p(File.dirname(file))
     end
     puts "[add] writing '#{file}'"
     File.open(file, "w") { |f| f.write(content) }

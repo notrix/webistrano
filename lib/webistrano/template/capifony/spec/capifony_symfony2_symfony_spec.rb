@@ -102,7 +102,7 @@ describe "Capifony::Symfony2 - symfony" do
       @configuration.find_and_execute_task('symfony:assetic:dump')
     end
 
-    it { should have_run(' sh -c \'cd /var/www/releases/20120927 && php app/console assetic:dump --env=prod --no-debug\'') }
+    it { should have_run(' sh -c \'cd /var/www/releases/20120927 && php app/console assetic:dump --env=prod --no-debug /var/www/releases/20120927/web\'') }
   end
 
   context "when running symfony:assetic:dump with sudo" do
@@ -111,7 +111,7 @@ describe "Capifony::Symfony2 - symfony" do
       @configuration.find_and_execute_task('symfony:assetic:dump')
     end
 
-    it { should have_run('sudo sh -c \'cd /var/www/releases/20120927 && php app/console assetic:dump --env=prod --no-debug\'') }
+    it { should have_run('sudo sh -c \'cd /var/www/releases/20120927 && php app/console assetic:dump --env=prod --no-debug /var/www/releases/20120927/web\'') }
   end
 
   it "defines symfony:vendors tasks" do
@@ -149,7 +149,6 @@ describe "Capifony::Symfony2 - symfony" do
   end
 
   it "defines symfony:composer tasks" do
-    @configuration.find_task('symfony:composer:self_update').should_not == nil
     @configuration.find_task('symfony:composer:install').should_not == nil
     @configuration.find_task('symfony:composer:update').should_not == nil
     @configuration.find_task('symfony:composer:dump_autoload').should_not == nil
@@ -163,7 +162,7 @@ describe "Capifony::Symfony2 - symfony" do
 
     it { should_not have_run('vendorDir=/var/www/current/vendor; if [ -d $vendorDir ] || [ -h $vendorDir ]; then cp -a $vendorDir /var/www/releases/20120927/vendor; fi;') }
     it { should have_run(' sh -c \'cd /var/www/releases/20120927 && curl -s http://getcomposer.org/installer | php\'') }
-    it { should have_run(' sh -c \'cd /var/www/releases/20120927 && php composer.phar update --no-scripts --verbose --prefer-dist\'') }
+    it { should have_run(' sh -c \'cd /var/www/releases/20120927 && php composer.phar update --no-scripts --verbose --prefer-dist --optimize-autoloader\'') }
   end
 
   context "when running symfony:composer:update with a given composer_bin" do
@@ -174,8 +173,7 @@ describe "Capifony::Symfony2 - symfony" do
 
     it { should_not have_run('vendorDir=/var/www/current/vendor; if [ -d $vendorDir ] || [ -h $vendorDir ]; then cp -a $vendorDir /var/www/releases/20120927/vendor; fi;') }
     it { should_not have_run(' sh -c \'cd /var/www/releases/20120927 && curl -s http://getcomposer.org/installer | php\'') }
-    it { should have_run(' sh -c \'cd /var/www/releases/20120927 && my_composer self-update\'') }
-    it { should have_run(' sh -c \'cd /var/www/releases/20120927 && my_composer update --no-scripts --verbose --prefer-dist\'') }
+    it { should have_run(' sh -c \'cd /var/www/releases/20120927 && my_composer update --no-scripts --verbose --prefer-dist --optimize-autoloader\'') }
   end
 
   context "when running symfony:composer:update with enabled copy_vendors" do
@@ -194,10 +192,10 @@ describe "Capifony::Symfony2 - symfony" do
     end
 
     it { should_not have_run('vendorDir=/var/www/current/vendor; if [ -d $vendorDir ] || [ -h $vendorDir ]; then cp -a $vendorDir /var/www/releases/20120927/vendor; fi;') }
-    it { should have_run(' sh -c \'cp /var/www/releases/20120920/composer.phar /var/www/releases/20120927/\'') }
+    it { should_not have_run(' sh -c \'cp /var/www/releases/20120920/composer.phar /var/www/releases/20120927/\'') }
     it { should_not have_run(' sh -c \'cd /var/www/releases/20120927 && curl -s http://getcomposer.org/installer | php\'') }
     it { should have_run(' sh -c \'cd /var/www/releases/20120927 && php composer.phar self-update\'') }
-    it { should have_run(' sh -c \'cd /var/www/releases/20120927 && php composer.phar install --no-scripts --verbose --prefer-dist\'') }
+    it { should have_run(' sh -c \'cd /var/www/releases/20120927 && php composer.phar install --no-scripts --verbose --prefer-dist --optimize-autoloader\'') }
   end
 
   context "when running symfony:composer:install without any existing composer.phar in the previous release" do
@@ -210,7 +208,7 @@ describe "Capifony::Symfony2 - symfony" do
     it { should_not have_run(' sh -c \'cp /var/www/releases/20120920/composer.phar /var/www/releases/20120927/\'') }
     it { should have_run(' sh -c \'cd /var/www/releases/20120927 && curl -s http://getcomposer.org/installer | php\'') }
     it { should_not have_run(' sh -c \'cd /var/www/releases/20120927 && php composer.phar self-update\'') }
-    it { should have_run(' sh -c \'cd /var/www/releases/20120927 && php composer.phar install --no-scripts --verbose --prefer-dist\'') }
+    it { should have_run(' sh -c \'cd /var/www/releases/20120927 && php composer.phar install --no-scripts --verbose --prefer-dist --optimize-autoloader\'') }
   end
 
   context "when running symfony:composer:install" do
@@ -220,7 +218,7 @@ describe "Capifony::Symfony2 - symfony" do
 
     it { should_not have_run('vendorDir=/var/www/current/vendor; if [ -d $vendorDir ] || [ -h $vendorDir ]; then cp -a $vendorDir /var/www/releases/20120927/vendor; fi;') }
     it { should have_run(' sh -c \'cd /var/www/releases/20120927 && curl -s http://getcomposer.org/installer | php\'') }
-    it { should have_run(' sh -c \'cd /var/www/releases/20120927 && php composer.phar install --no-scripts --verbose --prefer-dist\'') }
+    it { should have_run(' sh -c \'cd /var/www/releases/20120927 && php composer.phar install --no-scripts --verbose --prefer-dist --optimize-autoloader\'') }
   end
 
   context "when running symfony:composer:install with a given composer_bin" do
@@ -231,8 +229,7 @@ describe "Capifony::Symfony2 - symfony" do
 
     it { should_not have_run('vendorDir=/var/www/current/vendor; if [ -d $vendorDir ] || [ -h $vendorDir ]; then cp -a $vendorDir /var/www/releases/20120927/vendor; fi;') }
     it { should_not have_run(' sh -c \'cd /var/www/releases/20120927 && curl -s http://getcomposer.org/installer | php\'') }
-    it { should have_run(' sh -c \'cd /var/www/releases/20120927 && my_composer self-update\'') }
-    it { should have_run(' sh -c \'cd /var/www/releases/20120927 && my_composer install --no-scripts --verbose --prefer-dist\'') }
+    it { should have_run(' sh -c \'cd /var/www/releases/20120927 && my_composer install --no-scripts --verbose --prefer-dist --optimize-autoloader\'') }
   end
 
   context "when running symfony:composer:install with enabled copy_vendors" do
@@ -260,7 +257,6 @@ describe "Capifony::Symfony2 - symfony" do
     end
 
     it { should_not have_run(' sh -c \'cd /var/www/releases/20120927 && curl -s http://getcomposer.org/installer | php\'') }
-    it { should have_run(' sh -c \'cd /var/www/releases/20120927 && my_composer self-update\'') }
     it { should have_run(' sh -c \'cd /var/www/releases/20120927 && my_composer dump-autoload --optimize\'') }
   end
 

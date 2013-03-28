@@ -1,6 +1,53 @@
-### 2.2.4 / ???
+### 2.2.9 / ???
 
 n/a
+
+### 2.2.8 / March 5, 2013
+
+* Remove the ability to copy of Composer
+* Use composer optimize autoloader
+* BugFix running cap deploy with user_sudo = true
+* replace run block for data capturing with capture method + make try_sudo work
+* Update assets_version before installing assets
+* Add pretty printing to symfony:assets:update_version
+* Update capifony.gemspec
+
+### 2.2.7 / February 3, 2013
+
+* Implemented :doctrine_em configuration option (#321)
+* Added :doctrine_em symbol with default value of `false`
+* Added `before` hooks for relevant symfony:doctrine commands to assemble --em flag
+* Added flag variable to commands being run
+* Added tests for --em flag in spec file
+* Updated specs for doctrine drop tasks
+* Added confirmation to doctrine drops tasks
+* Fixed symfony:doctrine:database:drop (missed --force argument too).
+* Added confirmation for symfony:doctrine:database:drop and symfony:doctrine:schema:drop.
+* Compatibility to Capistrano 2.14.1
+* Fixed symfony:doctrine:schema:drop - added --force
+* Task symfony:doctrine:schema:drop never actually droped schema because of missing --force parameter.
+
+### 2.2.6 / January 17, 2013
+
+* Clear controllers should only run on the app role
+* Do not update composer [Closes #309]
+* Use trysudo when running a custom symfony command
+
+### 2.2.5 / December 29, 2012
+
+* host specification in mysql remote operations
+
+### 2.2.4 / December 13, 2012
+
+* Fixed a typo
+* Fix #294
+* extended fallback code when using
+* symlinks for file systems that don't support them
+* Fix travis config
+* Fix symfony:assets:update_version, add sh tests. Fixes #282
+* Fix whitespaces
+* Use config_path var instead of hardcoded value
+* deploy:migrate primary restriction is not cascaded
 
 ### 2.2.3 / November 28, 2012
 
