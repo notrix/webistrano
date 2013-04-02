@@ -128,6 +128,9 @@ module Webistrano
         # Symfony2 version
         set :symfony_version,           2
 
+        # Doctrine custom entity manager
+        set :doctrine_em,           false
+
         # If set to false, it will never ask for confirmations (migrations task for instance)
         # Use it carefully, really!
         set :interactive_mode,      false
@@ -171,6 +174,22 @@ module Webistrano
           logger.info 'ok'.green
 
           $error = false
+        end
+
+        [
+          "symfony:doctrine:cache:clear_metadata",
+          "symfony:doctrine:cache:clear_query",
+          "symfony:doctrine:cache:clear_result",
+          "symfony:doctrine:schema:create",
+          "symfony:doctrine:schema:drop",
+          "symfony:doctrine:schema:update",
+          "symfony:doctrine:load_fixtures",
+          "symfony:doctrine:migrations:migrate",
+          "symfony:doctrine:migrations:status",
+        ].each do |action|
+          before action do
+            set :doctrine_em_flag, doctrine_em ? " --em=#{doctrine_em}" : ""
+          end
         end
 
         ["symfony:composer:install", "symfony:composer:update"].each do |action|

@@ -63,6 +63,17 @@ class DeploymentsController < ApplicationController
     end
   end
 
+  # GET /projects/1/stages/1/start
+  def start
+    @deployment = Deployment.new
+
+    if populate_deployment_and_fire
+
+        @deployment.deploy_in_background!
+
+    end
+  end
+
   # GET /projects/1/stages/1/deployments/latest
   def latest
     @deployment = @stage.deployments.find(:first, :order => "created_at desc")
