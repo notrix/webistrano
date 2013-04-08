@@ -12,7 +12,7 @@ gem "open4"
 gem "version_fu"
 gem "exception_notification", "2.3.3.0"
 gem "thin"
-gem "capistrano_rsync_with_remote_cache"
+gem 'capistrano_rsync_with_remote_cache', :git => 'git://github.com/jverdeyen/capistrano_rsync_with_remote_cache.git'
 gem "colored"
 gem "unicorn"
 
