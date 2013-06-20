@@ -76,7 +76,7 @@ module Webistrano
         set :composer_bin,          false
 
         # Options to pass to composer when installing/updating
-        set :composer_options,      "--no-scripts --verbose --prefer-dist"
+        set :composer_options,      "--no-scripts --verbose --prefer-dist --no-interaction"
 
         # Whether to update vendors using the configured dependency manager (composer or bin/vendors)
         set :update_vendors,        false
