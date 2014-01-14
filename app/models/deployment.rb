@@ -107,14 +107,6 @@ class Deployment < ActiveRecord::Base
     self.status == STATUS_RUNNING
   end
 
-  def real_status
-    if self.status == STATUS_RUNNING
-        "dancing"
-    else
-      self.status
-    end
-  end
-
   def status_in_html
     "<span class='deployment_status_#{self.status.gsub(/ /, '_')}'>#{self.status}</span>"
   end
