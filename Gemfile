@@ -15,6 +15,7 @@ gem "thin"
 gem 'capistrano_rsync_with_remote_cache', :git => 'git://github.com/jverdeyen/capistrano_rsync_with_remote_cache.git'
 gem "colored"
 gem "unicorn"
+gem "capistrano-supervisord", "~> 0.0.2"
 
 group :test do
   gem "mocha", "0.9.8"

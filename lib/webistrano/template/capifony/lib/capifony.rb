@@ -1,3 +1,5 @@
+require 'capistrano-supervisord'
+
 # Symfony environment on local
 set :symfony_env_local, "dev"
 
