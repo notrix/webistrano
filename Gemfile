@@ -7,7 +7,7 @@ gem "mysql"
 gem "rake"
 gem "rdoc"
 gem "syntax"
-gem "capistrano", "~> 2.13.4"
+gem "capistrano", :git => 'git://github.com/capistrano/capistrano.git', :branch => 'legacy-v2'
 gem "open4"
 gem "version_fu"
 gem "exception_notification", "2.3.3.0"
