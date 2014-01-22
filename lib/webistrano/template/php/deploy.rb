@@ -1,11 +1,3 @@
-set :rsync_options, '-avlz --delete'
-set :shared_children,   %w(cached-copy sessions logs)
-set :repository_cache, 'cached-copy'
-set :local_cache, "/var/deploys/#{webistrano_project}/#{webistrano_stage}"
-
-before "deploy:finalize_update" , "compress:start"
-after "deploy:create_symlink" , "deploy:deploy_php" , "deploy:cleanup"
-
 namespace :deploy do
 
   task :restart, :roles => :app, :except => { :no_release => true } do
@@ -20,23 +12,19 @@ namespace :deploy do
    # do nothing
   end
 
-  task :create_symlink, :roles => :app, :except => { :no_release => true } do
-   # do nothing
-  end
-
   task :finalize_update do
-    sudo "rm -fr #{release_path}/.git"
+    try_sudo "rm -fr #{release_path}/.git"
     run "chmod -R g+w #{latest_release}"
   end
 
   task :clear_cache_dirs_action do
     clear_cache_dirs.each{|dir|
-      sudo "rm -fr --preserve-root #{shared_path}/#{dir}"
+      try_sudo "rm -fr --preserve-root #{shared_path}/#{dir}"
     }
   end
 
   task :apache_graceful do
-    sudo "/etc/init.d/apache2 graceful"
+    try_sudo "/etc/init.d/apache2 graceful"
   end
 
   task :symlink_shared_dirs do
@@ -51,7 +39,7 @@ namespace :deploy do
           ln -sfn #{shared_path}/#{dir_last} #{latest_release}/#{dir}
         CMD
 
-        sudo "chmod -R g+w #{shared_path}/#{dir_last}"
+        try_sudo "chmod -R g+w #{shared_path}/#{dir_last}"
       else
         run <<-CMD
           mkdir -p #{shared_path}/#{dir} &&
@@ -59,7 +47,7 @@ namespace :deploy do
           ln -sfn #{shared_path}/#{dir} #{latest_release}/#{dir_path}/#{dir_last}
         CMD
 
-        sudo "chmod -R g+w #{shared_path}/#{dir}"
+        try_sudo "chmod -R g+w #{shared_path}/#{dir}"
       end
     }
   end

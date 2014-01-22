@@ -4,12 +4,16 @@ module Webistrano
 
       CONFIG = Webistrano::Template::BasePHP::CONFIG.dup.merge({
         :clear_cache_dirs => [],
+        :deploy_to => '/path/to/deployment_base',
         :environment => "dev, prod, test",
         :filters => ["jpegoptim","csstidy","yuijs","yuicss"],
         :git_enable_submodules => false,
+        :local_cache => "/var/deploys/\#{webistrano_project}/\#{webistrano_stage}",
+        :repository_cache => "cached-copy",
         :restart_apache => true,
+        :rsync_options => "-avlz --delete",
+        :shared_children => "%w(cached-copy sessions logs)",
         :shared_dirs => [],
-        :deploy_to => '/path/to/deployment_base',
       }).freeze
 
       DESC = <<-'EOS'
