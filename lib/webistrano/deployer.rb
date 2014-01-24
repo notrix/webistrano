@@ -121,6 +121,7 @@ module Webistrano
       set_project_and_stage_names(config)
       set_stage_configuration(config)
       set_stage_roles(config)
+      set_deployment_configuration(config)
 
       load_project_template_tasks(config)
       load_stage_custom_recipes(config)
@@ -240,10 +241,16 @@ module Webistrano
       end
     end
 
-    # sets webistrano_project and webistrano_stage to corrosponding values
+    # sets webistrano_project and webistrano_stage to corresponding values
     def set_project_and_stage_names(config)
       config.set(:webistrano_project, deployment.stage.project.webistrano_project_name)
       config.set(:webistrano_stage, deployment.stage.webistrano_stage_name)
+    end
+
+    # sets deployment configurations to corresponding values
+    def set_deployment_configuration(config)
+      config.set(:deployment_user, deployment.user_id)
+      config.set(:deployment_description, deployment.description)
     end
 
     # casts a given string to the correct Ruby value
